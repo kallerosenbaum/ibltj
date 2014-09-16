@@ -3,6 +3,8 @@ package se.rosenbaum.iblt;
 import org.junit.Before;
 import org.junit.Test;
 import se.rosenbaum.iblt.data.IntegerData;
+import se.rosenbaum.iblt.hash.IntegerDataSubtablesHashFunction;
+import se.rosenbaum.iblt.util.TestUtils;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
@@ -18,21 +20,13 @@ public class IBLTTest {
     public static final IntegerData ONE = new IntegerData(1);
     private IBLT<IntegerData, IntegerData> sut;
 
-    private Cell[] createIntegerCells(int numberOfCells) {
-        Cell[] cells = new Cell[numberOfCells];
-        for (int i = 0; i < numberOfCells; i++) {
-            cells[i] = new Cell(new IntegerData(0), new IntegerData(0));
-        }
-        return cells;
-    }
-
     @Before
     public void setup() {
         setup(1000, 5);
     }
 
     private void setup(int cellCount, int hashFunctionCount) {
-        sut = new IBLT<IntegerData, IntegerData>(createIntegerCells(cellCount), new IntegerDataHashFunction(cellCount, hashFunctionCount));
+        sut = new IBLT<IntegerData, IntegerData>(TestUtils.createIntegerCells(cellCount), new IntegerDataSubtablesHashFunction(cellCount, hashFunctionCount));
     }
 
     private void insert(int key, int value) {
@@ -48,8 +42,6 @@ public class IBLTTest {
     private void delete(int key, int value) {
         sut.delete(new IntegerData(key), new IntegerData(value));
     }
-
-
 
     @Test
     public void testInsertOne() throws Exception {
@@ -113,15 +105,4 @@ public class IBLTTest {
         assertNull(sut.get(ONE));
     }
 
-    public void testDelete() throws Exception {
-
-    }
-
-    public void testGet() throws Exception {
-
-    }
-
-    public void testListEntries() throws Exception {
-
-    }
 }

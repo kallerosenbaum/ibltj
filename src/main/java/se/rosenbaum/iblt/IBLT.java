@@ -1,6 +1,7 @@
 package se.rosenbaum.iblt;
 
 import se.rosenbaum.iblt.data.Data;
+import se.rosenbaum.iblt.hash.HashFunction;
 
 import java.util.Map;
 

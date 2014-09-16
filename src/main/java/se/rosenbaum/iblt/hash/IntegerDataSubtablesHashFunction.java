@@ -1,22 +1,21 @@
-package se.rosenbaum.iblt;
+package se.rosenbaum.iblt.hash;
 
 import se.rosenbaum.iblt.data.IntegerData;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 /**
 * User: kalle
 * Date: 9/14/14 1:21 PM
 */
-public class IntegerDataHashFunction implements HashFunction<IntegerData> {
+public class IntegerDataSubtablesHashFunction implements HashFunction<IntegerData> {
     private int cellCount;
     private int hashFunctionCount;
     private MessageDigest digest;
 
-    public IntegerDataHashFunction(int cellCount, int hashFunctionCount) {
+    public IntegerDataSubtablesHashFunction(int cellCount, int hashFunctionCount) {
         if (cellCount % hashFunctionCount != 0) {
             throw new RuntimeException("Number of cells must be a multiple of number of hash functions");
         }

@@ -1,4 +1,4 @@
-package se.rosenbaum.iblt;
+package se.rosenbaum.iblt.hash;
 
 import se.rosenbaum.iblt.data.Data;
 
