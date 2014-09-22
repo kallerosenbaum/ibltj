@@ -45,4 +45,9 @@ public class Cell<K extends Data, V extends Data> {
     public V getValueSum() {
         return valueSum;
     }
+
+    public String toString() {
+        return "[" + count + ", " + getKeySum() + ", " + getValueSum() + "]";
+    }
+
 }

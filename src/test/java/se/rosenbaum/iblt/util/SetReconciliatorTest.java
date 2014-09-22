@@ -4,9 +4,11 @@ import org.junit.Test;
 import se.rosenbaum.iblt.IBLT;
 import se.rosenbaum.iblt.data.IntegerData;
 import se.rosenbaum.iblt.hash.IntegerDataSubtablesHashFunction;
+import se.rosenbaum.iblt.hash.IntegerSimpleHashFunction;
 
 import java.util.*;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static se.rosenbaum.iblt.util.TestUtils.createIntegerCells;
@@ -22,7 +24,7 @@ public class SetReconciliatorTest {
     public void testReconcile() throws Exception {
         int cellCount = 10;
         IBLT<IntegerData, IntegerData> iblt = new IBLT<IntegerData, IntegerData>(createIntegerCells(cellCount),
-                new IntegerDataSubtablesHashFunction(cellCount, 2));
+                new IntegerSimpleHashFunction(cellCount, 2));
         int domainSize = 10;
         // IBLT-data should be all values between 1 and 10, but some are missing
         // My-data should also be all values between 1 and 10 but some are missing of which some are also missing in
@@ -32,38 +34,39 @@ public class SetReconciliatorTest {
         // My-data contains 1,3,4,5,6,8,9,10 (missing 2, 7)
         List<Integer> missingInIBLT = Arrays.asList(3, 7, 10);
         List<Integer> missingInMyData = Arrays.asList(2, 7);
-        List<Tuple<IntegerData, IntegerData>> myData = new ArrayList<Tuple<IntegerData, IntegerData>>();
+        Map<IntegerData, IntegerData> myData = new HashMap<IntegerData, IntegerData>();
         for (int i = 1; i <= domainSize; i++) {
             if (!missingInIBLT.contains(i)) {
                 iblt.insert(data(i), data(i));
             }
             if (!missingInMyData.contains(i)) {
-                myData.add(tuple(i, i));
+                myData.put(data(i), data(i));
             }
         }
 
         SetReconciliator<IntegerData, IntegerData> reconciliator = new SetReconciliator<IntegerData, IntegerData>(iblt);
-        Iterator<Tuple<IntegerData, IntegerData>> result = reconciliator.reconcile(myData.iterator());
+        Map<IntegerData, IntegerData> result = reconciliator.reconcile(myData);
 
-        Collection<Tuple<IntegerData, IntegerData>> expectedResult = createTuples(1, 2, 4, 5, 6, 8, 9);
-        while (result.hasNext()) {
-            assertTrue(expectedResult.remove(result.next()));
+        Map<IntegerData, IntegerData> expectedResult = createMap(1, 2, 4, 5, 6, 8, 9);
+        assertEquals(expectedResult.size(), result.size());
+        for (Map.Entry<IntegerData, IntegerData> resultEntry : result.entrySet()) {
+            IntegerData expectedValue = expectedResult.remove(resultEntry.getKey());
+            assertNotNull(expectedValue);
+            assertEquals(expectedValue, resultEntry.getValue());
+
         }
         assertEquals(0, expectedResult.size());
 
     }
 
-    private Collection<Tuple<IntegerData, IntegerData>> createTuples(int... keys) {
-        Collection<Tuple<IntegerData, IntegerData>> expectedResult = new ArrayList<Tuple<IntegerData, IntegerData>>();
-        for (int key : keys) {
-            expectedResult.add(tuple(key, key));
+    private Map<IntegerData,IntegerData> createMap(int... data) {
+        Map<IntegerData, IntegerData> result = new HashMap<IntegerData, IntegerData>();
+        for (int i : data) {
+            result.put(data(i), data(i));
         }
-        return expectedResult;
+        return result;
     }
 
-    private Tuple<IntegerData, IntegerData> tuple(int key, int value) {
-        return new Tuple<IntegerData, IntegerData>(new IntegerData(key), new IntegerData(value));
-    }
 
     private IntegerData data(int dataValue) {
         return new IntegerData(dataValue);

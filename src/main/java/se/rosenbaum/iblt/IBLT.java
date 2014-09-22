@@ -2,8 +2,10 @@ package se.rosenbaum.iblt;
 
 import se.rosenbaum.iblt.data.Data;
 import se.rosenbaum.iblt.hash.HashFunction;
+import se.rosenbaum.iblt.util.ResidualData;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 public class IBLT<K extends Data, V extends Data> {
     private Cell<K, V>[] cells;
@@ -48,7 +50,28 @@ public class IBLT<K extends Data, V extends Data> {
         throw new NotFoundException(key);
     }
 
-    public Map<K,V> listEntries() {
-        return null;
+    public ResidualData<K, V> listEntries() {
+        ResidualData<K, V> residualData = new ResidualData<K, V>();
+
+        boolean found = true;
+        while (found) {
+            found = false;
+            for (Cell<K, V> cell : cells) {
+                 if (cell.getCount() == 1) {
+                     K key = (K) cell.getKeySum().copy();
+                     V value = (V) cell.getValueSum().copy();
+                     residualData.putExtra(key, value);
+                     this.delete(key, value);
+                     found = true;
+                 } else if (cell.getCount() == -1) {
+                     K key = (K)cell.getKeySum().invertCopy();
+                     V value = (V)cell.getValueSum().invertCopy();
+                     residualData.putAbsent(key, value);
+                     this.insert(key, value);
+                     found = true;
+                 }
+            }
+        }
+        return residualData;
     }
 }

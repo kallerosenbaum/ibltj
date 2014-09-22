@@ -9,5 +9,7 @@ public interface Data<D extends Data> {
 
     public void subtract(D dataToSubtract);
 
+    public D invertCopy();
+
     public D copy();
 }

@@ -22,6 +22,11 @@ public class IntegerData implements Data<IntegerData> {
     }
 
     @Override
+    public IntegerData invertCopy() {
+        return new IntegerData(-this.data);
+    }
+
+    @Override
     public IntegerData copy() {
         return new IntegerData(this.data);
     }
@@ -36,7 +41,16 @@ public class IntegerData implements Data<IntegerData> {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(data).hashCode();
+    }
+
     public int getValue() {
         return data;
+    }
+
+    public String toString() {
+        return "" + data;
     }
 }

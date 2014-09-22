@@ -4,7 +4,9 @@ import se.rosenbaum.iblt.IBLT;
 import se.rosenbaum.iblt.data.Data;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 public class SetReconciliator<K extends Data, V extends Data> {
@@ -14,9 +16,20 @@ public class SetReconciliator<K extends Data, V extends Data> {
         this.incomingIBLT = incomingIBLT;
     }
 
-    public Iterator<Tuple<K, V>> reconcile(Iterator<Tuple<K, V>> myData) {
-        return Collections.emptyIterator();
+    public Map<K, V> reconcile(Map<K, V> myData) {
+        for (Map.Entry<K, V> entry : myData.entrySet()) {
+            incomingIBLT.delete(entry.getKey(), entry.getValue());
+        }
+
+        ResidualData<K, V> residualData = incomingIBLT.listEntries();
+
+        Map<K, V> result = new HashMap(myData);
+        for (K key : residualData.getAbsentEntries().keySet()) {
+            result.remove(key);
+        }
+
+        result.putAll(residualData.getExtraEntries());
+
+        return result;
     }
-
-
 }
