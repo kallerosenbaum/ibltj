@@ -3,12 +3,12 @@ package se.rosenbaum.iblt.util;
 import org.junit.Test;
 import se.rosenbaum.iblt.IBLT;
 import se.rosenbaum.iblt.data.IntegerData;
-import se.rosenbaum.iblt.hash.IntegerDataSubtablesHashFunction;
-import se.rosenbaum.iblt.hash.IntegerSimpleHashFunction;
+import se.rosenbaum.iblt.hash.IntegerSimpleHashFunctions;
 
 import java.util.*;
 
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static se.rosenbaum.iblt.util.TestUtils.createIntegerCells;
@@ -21,42 +21,113 @@ public class SetReconciliatorTest {
     }
 
     @Test
-    public void testReconcile() throws Exception {
-        int cellCount = 10;
-        IBLT<IntegerData, IntegerData> iblt = new IBLT<IntegerData, IntegerData>(createIntegerCells(cellCount),
-                new IntegerSimpleHashFunction(cellCount, 2));
-        int domainSize = 10;
-        // IBLT-data should be all values between 1 and 10, but some are missing
-        // My-data should also be all values between 1 and 10 but some are missing of which some are also missing in
-        // IBLT-data.
+    public void testReconcileCannotListEntries() {
+        IBLT<IntegerData, IntegerData> iblt = createIblt(1, 1);
 
-        // IBLT contains 1,2,4,5,6,8,9   (missing 3, 7, 10)
-        // My-data contains 1,3,4,5,6,8,9,10 (missing 2, 7)
-        List<Integer> missingInIBLT = Arrays.asList(3, 7, 10);
-        List<Integer> missingInMyData = Arrays.asList(2, 7);
-        Map<IntegerData, IntegerData> myData = new HashMap<IntegerData, IntegerData>();
-        for (int i = 1; i <= domainSize; i++) {
-            if (!missingInIBLT.contains(i)) {
-                iblt.insert(data(i), data(i));
-            }
-            if (!missingInMyData.contains(i)) {
-                myData.put(data(i), data(i));
-            }
+        for (Map.Entry<IntegerData, IntegerData> ibltEntry : createMap(1, 2).entrySet()) {
+            iblt.insert(ibltEntry.getKey(), ibltEntry.getValue());
         }
 
         SetReconciliator<IntegerData, IntegerData> reconciliator = new SetReconciliator<IntegerData, IntegerData>(iblt);
-        Map<IntegerData, IntegerData> result = reconciliator.reconcile(myData);
+        Map<IntegerData, IntegerData> result = reconciliator.reconcile(createMap(3));
+        assertNull(result);
+    }
 
-        Map<IntegerData, IntegerData> expectedResult = createMap(1, 2, 4, 5, 6, 8, 9);
-        assertEquals(expectedResult.size(), result.size());
+    @Test
+    public void testReconcile() throws Exception {
+        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        testReconcile(createMap(1, 2, 4, 5, 6, 8, 9), iblt, createMap(1, 3, 4, 5, 6, 8, 9, 10));
+    }
+
+    @Test
+    public void testReconcile5() {
+        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        Map<IntegerData, IntegerData> ibltData = createRandomMap(5);
+        Map<IntegerData, IntegerData> myData = createDifference(1, 1, ibltData);
+        testReconcile(ibltData, iblt, myData);
+    }
+
+    @Test
+    public void testReconcile1000() {
+        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        Map<IntegerData, IntegerData> ibltData = createRandomMap(1000);
+        Map<IntegerData, IntegerData> myData = createDifference(50, 50, ibltData);
+        testReconcile(ibltData, iblt, myData);
+    }
+
+    @Test
+    public void testReconcile100() {
+        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        Map<IntegerData, IntegerData> ibltData = createRandomMap(100);
+        Map<IntegerData, IntegerData> myData = createDifference(5, 5, ibltData);
+        testReconcile(ibltData, iblt, myData);
+    }
+
+    @Test
+    public void testReconcile10() {
+        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        Map<IntegerData, IntegerData> ibltData = createRandomMap(10);
+        Map<IntegerData, IntegerData> myData = createDifference(5, 5, ibltData);
+        testReconcile(ibltData, iblt, myData);
+    }
+
+    @Test
+    public void testReconcile1() {
+        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        Map<IntegerData, IntegerData> ibltData = createMap(1);
+        Map<IntegerData, IntegerData> myData = createMap(2, 3, 4, 5);
+        testReconcile(ibltData, iblt, myData);
+    }
+
+    private IBLT<IntegerData, IntegerData> createIblt(int cellCount, int hashFunctionCount) {
+        return new IBLT<IntegerData, IntegerData>(createIntegerCells(cellCount),
+                new IntegerSimpleHashFunctions(cellCount, hashFunctionCount));
+    }
+
+    private void  testReconcile(Map<IntegerData, IntegerData> ibltData, IBLT<IntegerData, IntegerData> iblt, Map<IntegerData, IntegerData> myDataMap) {
+        for (Map.Entry<IntegerData, IntegerData> ibltEntry : ibltData.entrySet()) {
+            iblt.insert(ibltEntry.getKey(), ibltEntry.getValue());
+        }
+
+        SetReconciliator<IntegerData, IntegerData> reconciliator = new SetReconciliator<IntegerData, IntegerData>(iblt);
+        Map<IntegerData, IntegerData> result = reconciliator.reconcile(myDataMap);
+
+        assertEquals(ibltData.size(), result.size());
         for (Map.Entry<IntegerData, IntegerData> resultEntry : result.entrySet()) {
-            IntegerData expectedValue = expectedResult.remove(resultEntry.getKey());
+            IntegerData expectedValue = ibltData.remove(resultEntry.getKey());
             assertNotNull(expectedValue);
             assertEquals(expectedValue, resultEntry.getValue());
-
         }
-        assertEquals(0, expectedResult.size());
+        assertEquals(0, ibltData.size());
+    }
 
+    private Map<IntegerData,IntegerData> createRandomMap(int size) {
+        Map<IntegerData, IntegerData> result = new HashMap<IntegerData, IntegerData>();
+        Random random = new Random(1);
+        for (int i = 0; i < size; i++) {
+            while(result.put(data(random.nextInt()), data(random.nextInt())) != null);
+        }
+        return result;
+    }
+
+    private Map<IntegerData, IntegerData> createDifference(int missingInIbltCount, int extraInIbltCount, Map<IntegerData, IntegerData> ibltData) {
+        Map<IntegerData, IntegerData> result = new HashMap<IntegerData, IntegerData>(ibltData);
+
+        Random random = new Random(2);
+        Iterator<IntegerData> dataToRemove = ibltData.keySet().iterator();
+        for (int i = 0; i < extraInIbltCount; i++) {
+            result.remove(dataToRemove.next());
+        }
+        for (int i = 0; i < missingInIbltCount; i++) {
+            while (true) {
+                IntegerData key = data(random.nextInt());
+                if (!ibltData.containsKey(key)) {
+                    result.put(key, data(random.nextInt()));
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     private Map<IntegerData,IntegerData> createMap(int... data) {

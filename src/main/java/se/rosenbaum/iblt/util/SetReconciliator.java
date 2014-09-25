@@ -22,6 +22,10 @@ public class SetReconciliator<K extends Data, V extends Data> {
         }
 
         ResidualData<K, V> residualData = incomingIBLT.listEntries();
+        if (residualData == null) {
+            // Reconciliation not possible, since we couldn't list entries.
+            return null;
+        }
 
         Map<K, V> result = new HashMap(myData);
         for (K key : residualData.getAbsentEntries().keySet()) {

@@ -22,6 +22,11 @@ public class IntegerData implements Data<IntegerData> {
     }
 
     @Override
+    public boolean isZero() {
+        return data == 0;
+    }
+
+    @Override
     public IntegerData invertCopy() {
         return new IntegerData(-this.data);
     }

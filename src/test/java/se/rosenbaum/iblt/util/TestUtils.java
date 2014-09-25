@@ -2,20 +2,20 @@ package se.rosenbaum.iblt.util;
 
 import se.rosenbaum.iblt.Cell;
 import se.rosenbaum.iblt.data.IntegerData;
+import se.rosenbaum.iblt.hash.HashFunction;
+import se.rosenbaum.iblt.hash.IntegerDataHashFunction;
 
-/**
- * Created with IntelliJ IDEA.
- * User: kalle
- * Date: 9/16/14
- * Time: 9:19 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestUtils {
     public static Cell[] createIntegerCells(int numberOfCells) {
         Cell[] cells = new Cell[numberOfCells];
+        HashFunction<IntegerData, IntegerData> hashFunction = new IntegerDataHashFunction();
         for (int i = 0; i < numberOfCells; i++) {
-            cells[i] = new Cell(new IntegerData(0), new IntegerData(0));
+            cells[i] = new Cell(data(0), data(0), data(0), hashFunction);
         }
         return cells;
+    }
+
+    public static IntegerData data(int value) {
+        return new IntegerData(value);
     }
 }
