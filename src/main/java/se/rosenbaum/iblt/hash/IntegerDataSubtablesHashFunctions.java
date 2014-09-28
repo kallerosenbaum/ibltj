@@ -46,15 +46,14 @@ public class IntegerDataSubtablesHashFunctions implements HashFunctions<IntegerD
         byte[] digested = digest.digest(intBytes);
 
 
-        int result = 0;
-        for (int i = 28; i < 32; i++) {
-            result += ((int)digested[i]) << 8*i;
-        }
+        int result = ByteBuffer.allocate(4).put(digested, 28, 4).getInt(0);
 
         int subtableSize = cellCount / hashFunctionCount;
         // We want a positive integer. Note that this is not very good because zero has
         // half the probablity as the rest of the values. -2 and 2 will both result i 2
         // but only 0 will result in 0.
-        return Math.abs(result) % subtableSize + hashFunctionNumber * subtableSize;
+        int cellIndex = Math.abs(result) % subtableSize + hashFunctionNumber * subtableSize;
+        System.out.println("h#:" + hashFunctionNumber + ", data: " + data.getValue() + ", cellIndex: " + cellIndex);
+        return cellIndex;
     }
 }

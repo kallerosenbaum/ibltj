@@ -16,6 +16,11 @@ public class SetReconciliator<K extends Data, V extends Data> {
         this.incomingIBLT = incomingIBLT;
     }
 
+    /**
+     * Tries to reconcile the iblt with the entries in myData.
+     * @param myData
+     * @return A map containing all the entries in the iblt. If reconciliation fails, null is returned
+     */
     public Map<K, V> reconcile(Map<K, V> myData) {
         for (Map.Entry<K, V> entry : myData.entrySet()) {
             incomingIBLT.delete(entry.getKey(), entry.getValue());

@@ -32,7 +32,10 @@ public class IntegerSimpleHashFunctions implements HashFunctions<IntegerData> {
         // We want a positive integer. Note that this is not very good because zero has
         // half the probablity as the rest of the values. -2 and 2 will both result i 2
         // but only 0 will result in 0.
-        int cellIndex = Math.abs(data.getValue()) % subtableSize + hashFunctionNumber * subtableSize;
+
+        // Also if data x ends up in cell c and d, and if data y ends up in cell c we don't want it to end up in cell d
+        // as well. At least not for all y that end up in cell c.
+        int cellIndex = (hashFunctionNumber + Math.abs(data.getValue())) % subtableSize + hashFunctionNumber * subtableSize;
         System.out.println("h#:" + hashFunctionNumber + ", data: " + data.getValue() + ", cellIndex: " + cellIndex);
         return cellIndex;
     }
