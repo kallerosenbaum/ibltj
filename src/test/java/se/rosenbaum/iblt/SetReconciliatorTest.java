@@ -2,18 +2,15 @@ package se.rosenbaum.iblt;
 
 import org.junit.Test;
 import se.rosenbaum.iblt.data.IntegerData;
-import se.rosenbaum.iblt.hash.IntegerDataSubtablesHashFunctions;
 import se.rosenbaum.iblt.util.SetReconciliator;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
-import static se.rosenbaum.iblt.util.TestUtils.createIntegerCells;
+import static se.rosenbaum.iblt.util.TestUtils.*;
 
 public class SetReconciliatorTest {
 
@@ -76,11 +73,6 @@ public class SetReconciliatorTest {
         testReconcile(ibltData, iblt, myData);
     }
 
-    private IBLT<IntegerData, IntegerData> createIblt(int cellCount, int hashFunctionCount) {
-        return new IBLT<IntegerData, IntegerData>(createIntegerCells(cellCount),
-                new IntegerDataSubtablesHashFunctions(cellCount, hashFunctionCount));
-    }
-
     private void  testReconcile(Map<IntegerData, IntegerData> ibltData, IBLT<IntegerData, IntegerData> iblt, Map<IntegerData, IntegerData> myDataMap) {
         for (Map.Entry<IntegerData, IntegerData> ibltEntry : ibltData.entrySet()) {
             iblt.insert(ibltEntry.getKey(), ibltEntry.getValue());
@@ -98,45 +90,4 @@ public class SetReconciliatorTest {
         assertEquals(0, ibltData.size());
     }
 
-    private Map<IntegerData,IntegerData> createRandomMap(int size) {
-        Map<IntegerData, IntegerData> result = new HashMap<IntegerData, IntegerData>();
-        Random random = new Random(1);
-        for (int i = 0; i < size; i++)
-            while (result.put(data(random.nextInt()), data(random.nextInt())) != null) {
-            }
-        return result;
-    }
-
-    private Map<IntegerData, IntegerData> createDifference(int missingInIbltCount, int extraInIbltCount, Map<IntegerData, IntegerData> ibltData) {
-        Map<IntegerData, IntegerData> result = new HashMap<IntegerData, IntegerData>(ibltData);
-
-        Random random = new Random(2);
-        Iterator<IntegerData> dataToRemove = ibltData.keySet().iterator();
-        for (int i = 0; i < extraInIbltCount; i++) {
-            result.remove(dataToRemove.next());
-        }
-        for (int i = 0; i < missingInIbltCount; i++) {
-            while (true) {
-                IntegerData key = data(random.nextInt());
-                if (!ibltData.containsKey(key)) {
-                    result.put(key, data(random.nextInt()));
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-
-    private Map<IntegerData,IntegerData> createMap(int... data) {
-        Map<IntegerData, IntegerData> result = new HashMap<IntegerData, IntegerData>();
-        for (int i : data) {
-            result.put(data(i), data(i));
-        }
-        return result;
-    }
-
-
-    private IntegerData data(int dataValue) {
-        return new IntegerData(dataValue);
-    }
 }
