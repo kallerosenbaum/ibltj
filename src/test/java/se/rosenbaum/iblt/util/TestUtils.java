@@ -6,7 +6,7 @@ import se.rosenbaum.iblt.hash.HashFunction;
 import se.rosenbaum.iblt.hash.IntegerDataHashFunction;
 
 public class TestUtils {
-    public static Cell[] createIntegerCells(int numberOfCells) {
+    public static Cell<IntegerData, IntegerData>[] createIntegerCells(int numberOfCells) {
         Cell[] cells = new Cell[numberOfCells];
         HashFunction<IntegerData, IntegerData> hashFunction = new IntegerDataHashFunction();
         for (int i = 0; i < numberOfCells; i++) {

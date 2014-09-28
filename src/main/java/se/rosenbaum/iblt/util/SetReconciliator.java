@@ -3,9 +3,7 @@ package se.rosenbaum.iblt.util;
 import se.rosenbaum.iblt.IBLT;
 import se.rosenbaum.iblt.data.Data;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
@@ -18,7 +16,8 @@ public class SetReconciliator<K extends Data, V extends Data> {
 
     /**
      * Tries to reconcile the iblt with the entries in myData.
-     * @param myData
+     * @param myData The data to subtract from the IBLT. This is the "guess" on what
+     *               data the IBLT contains.
      * @return A map containing all the entries in the iblt. If reconciliation fails, null is returned
      */
     public Map<K, V> reconcile(Map<K, V> myData) {
@@ -32,7 +31,7 @@ public class SetReconciliator<K extends Data, V extends Data> {
             return null;
         }
 
-        Map<K, V> result = new HashMap(myData);
+        Map<K, V> result = new HashMap<K, V>(myData);
         for (K key : residualData.getAbsentEntries().keySet()) {
             result.remove(key);
         }

@@ -1,25 +1,21 @@
-package se.rosenbaum.iblt.util;
+package se.rosenbaum.iblt;
 
 import org.junit.Test;
-import se.rosenbaum.iblt.IBLT;
 import se.rosenbaum.iblt.data.IntegerData;
 import se.rosenbaum.iblt.hash.IntegerDataSubtablesHashFunctions;
-import se.rosenbaum.iblt.hash.IntegerSimpleHashFunctions;
+import se.rosenbaum.iblt.util.SetReconciliator;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static se.rosenbaum.iblt.util.TestUtils.createIntegerCells;
 
 public class SetReconciliatorTest {
-    private static class ID extends IntegerData {
-        public ID(int value) {
-            super(value);
-        }
-    }
 
     @Test
     public void testReconcileCannotListEntries() {
@@ -105,9 +101,9 @@ public class SetReconciliatorTest {
     private Map<IntegerData,IntegerData> createRandomMap(int size) {
         Map<IntegerData, IntegerData> result = new HashMap<IntegerData, IntegerData>();
         Random random = new Random(1);
-        for (int i = 0; i < size; i++) {
-            while(result.put(data(random.nextInt()), data(random.nextInt())) != null);
-        }
+        for (int i = 0; i < size; i++)
+            while (result.put(data(random.nextInt()), data(random.nextInt())) != null) {
+            }
         return result;
     }
 

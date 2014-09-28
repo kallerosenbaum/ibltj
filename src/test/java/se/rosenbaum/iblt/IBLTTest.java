@@ -80,9 +80,8 @@ public class IBLTTest {
         }
         for (int i = 1; i <= keyCount; i++) {
             IntegerData key = new IntegerData(i);
-            IntegerData value = null;
             try {
-                value = sut.get(key);
+                IntegerData value = sut.get(key);
                 assertNotNull(value);
                 assertEquals("Failed on key " + i, i+constant, value.getValue());
                 sut.delete(key, value);

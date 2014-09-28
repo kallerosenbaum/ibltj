@@ -36,14 +36,11 @@ public class IntegerData implements Data<IntegerData> {
         return new IntegerData(this.data);
     }
 
+    @Override
     public boolean equals(Object other) {
-        if (other == null) {
-            return false;
-        }
-        if (other instanceof IntegerData) {
-            return data == ((IntegerData)other).data;
-        }
-        return false;
+        return other != null &&
+                other instanceof IntegerData &&
+                data == ((IntegerData) other).data;
     }
 
     @Override
@@ -51,11 +48,13 @@ public class IntegerData implements Data<IntegerData> {
         return Integer.valueOf(data).hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "" + data;
+    }
+
     public int getValue() {
         return data;
     }
 
-    public String toString() {
-        return "" + data;
-    }
 }
