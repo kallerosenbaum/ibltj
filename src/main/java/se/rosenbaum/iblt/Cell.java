@@ -57,7 +57,7 @@ public class Cell<K extends Data, V extends Data> {
     }
 
     public String toString() {
-        return "[" + count + ", " + getKeySum() + ", " + getValueSum() + ", " + hashKeySum + "]";
+        return "[" + count + ", " + getKeySum() + ", " + getValueSum() + ", " + hashKeySum + " , " + (isUnambiguous() ? "OK" : "BAD") + "]";
     }
 
     public boolean isUnambiguous() {

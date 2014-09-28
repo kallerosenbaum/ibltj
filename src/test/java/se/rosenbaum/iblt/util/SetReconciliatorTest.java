@@ -3,6 +3,7 @@ package se.rosenbaum.iblt.util;
 import org.junit.Test;
 import se.rosenbaum.iblt.IBLT;
 import se.rosenbaum.iblt.data.IntegerData;
+import se.rosenbaum.iblt.hash.IntegerDataSubtablesHashFunctions;
 import se.rosenbaum.iblt.hash.IntegerSimpleHashFunctions;
 
 import java.util.*;
@@ -49,7 +50,7 @@ public class SetReconciliatorTest {
 
     @Test
     public void testReconcile1000() {
-        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        IBLT<IntegerData, IntegerData> iblt = createIblt(200, 4);
         Map<IntegerData, IntegerData> ibltData = createRandomMap(1000);
         Map<IntegerData, IntegerData> myData = createDifference(50, 50, ibltData);
         testReconcile(ibltData, iblt, myData);
@@ -57,7 +58,7 @@ public class SetReconciliatorTest {
 
     @Test
     public void testReconcile100() {
-        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        IBLT<IntegerData, IntegerData> iblt = createIblt(16, 4);
         Map<IntegerData, IntegerData> ibltData = createRandomMap(100);
         Map<IntegerData, IntegerData> myData = createDifference(5, 5, ibltData);
         testReconcile(ibltData, iblt, myData);
@@ -65,7 +66,7 @@ public class SetReconciliatorTest {
 
     @Test
     public void testReconcile10() {
-        IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
+        IBLT<IntegerData, IntegerData> iblt = createIblt(20, 5);
         Map<IntegerData, IntegerData> ibltData = createRandomMap(10);
         Map<IntegerData, IntegerData> myData = createDifference(5, 5, ibltData);
         testReconcile(ibltData, iblt, myData);
@@ -75,13 +76,13 @@ public class SetReconciliatorTest {
     public void testReconcile1() {
         IBLT<IntegerData, IntegerData> iblt = createIblt(10, 2);
         Map<IntegerData, IntegerData> ibltData = createMap(1);
-        Map<IntegerData, IntegerData> myData = createMap(2, 3, 4, 5);
+        Map<IntegerData, IntegerData> myData = createMap(2, 3, 4, 7);
         testReconcile(ibltData, iblt, myData);
     }
 
     private IBLT<IntegerData, IntegerData> createIblt(int cellCount, int hashFunctionCount) {
         return new IBLT<IntegerData, IntegerData>(createIntegerCells(cellCount),
-                new IntegerSimpleHashFunctions(cellCount, hashFunctionCount));
+                new IntegerDataSubtablesHashFunctions(cellCount, hashFunctionCount));
     }
 
     private void  testReconcile(Map<IntegerData, IntegerData> ibltData, IBLT<IntegerData, IntegerData> iblt, Map<IntegerData, IntegerData> myDataMap) {
