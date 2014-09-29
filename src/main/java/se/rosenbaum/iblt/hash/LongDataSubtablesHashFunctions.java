@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 public class LongDataSubtablesHashFunctions extends AbstractDataSubtablesHashFunctions<LongData> {
 
     public LongDataSubtablesHashFunctions(int cellCount, int hashFunctionCount) {
-        super(hashFunctionCount, cellCount);
+        super(cellCount, hashFunctionCount);
     }
 
     @Override

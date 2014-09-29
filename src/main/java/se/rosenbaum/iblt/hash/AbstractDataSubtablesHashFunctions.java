@@ -10,7 +10,7 @@ public abstract class AbstractDataSubtablesHashFunctions<D extends Data> impleme
     protected int hashFunctionCount;
     protected MessageDigest messageDigest;
 
-    public AbstractDataSubtablesHashFunctions(int hashFunctionCount, int cellCount) {
+    public AbstractDataSubtablesHashFunctions(int cellCount, int hashFunctionCount) {
         if (cellCount % hashFunctionCount != 0) {
             throw new RuntimeException("Number of cells must be a multiple of number of hash functions");
         }

@@ -52,7 +52,7 @@ public class ScalingIntegrationTest {
                 for (int diffs = 0; diffs <= cellCount ; diffs = (diffs == 0 ? 1 : diffs*2)) {
                     spec.missingCount = diffs;
                     spec.extraCount = diffs;
-                    for (int dataSize = cellCount; dataSize < 1000000; dataSize *= 10) {
+                    for (int dataSize = cellCount; dataSize < 100000; dataSize *= 10) {
                         spec.dataSize = dataSize;
                         result = testReconciliation(spec, random);
                         logResult(result);
