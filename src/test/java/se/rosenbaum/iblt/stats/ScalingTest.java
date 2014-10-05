@@ -1,5 +1,6 @@
 package se.rosenbaum.iblt.stats;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import se.rosenbaum.iblt.IBLT;
 import se.rosenbaum.iblt.data.IntegerData;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static se.rosenbaum.iblt.util.TestUtils.createIblt;
 import static se.rosenbaum.iblt.util.TestUtils.data;
 
-public class ScalingIntegrationTest {
+public class ScalingTest {
 
     public static class IBLTSpec {
         int dataSize;
@@ -39,6 +40,7 @@ public class ScalingIntegrationTest {
 
 
     @Test
+    @Ignore
     public void test() {
         Random random = new Random(System.currentTimeMillis());
         IBLTSpec spec = new IBLTSpec();

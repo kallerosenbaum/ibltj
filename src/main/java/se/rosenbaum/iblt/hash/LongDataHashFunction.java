@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class LongDataHashFunction implements HashFunction<LongData, IntegerData> {
+public class LongDataHashFunction implements HashFunction<LongData, LongData> {
     MessageDigest digest;
 
     public LongDataHashFunction() {
@@ -19,13 +19,13 @@ public class LongDataHashFunction implements HashFunction<LongData, IntegerData>
     }
 
     @Override
-    public IntegerData hash(LongData data) {
+    public LongData hash(LongData data) {
         digest.reset();
 
         byte[] longBytes = ByteBuffer.allocate(8).putLong(data.getValue()).array();
         byte[] digested = digest.digest(longBytes);
-        int result = ByteBuffer.allocate(4).put(digested, 28, 4).getInt(0);
+        long result = ByteBuffer.allocate(8).put(digested, 24, 4).getLong(0);
 
-        return new IntegerData(result);
+        return new LongData(result);
     }
 }
