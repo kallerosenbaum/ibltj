@@ -57,4 +57,8 @@ public class ByteArrayData implements Data<ByteArrayData> {
     public byte[] getValue() {
         return Arrays.copyOf(byteArray, byteArray.length);
     }
+
+    public int getSize() {
+        return byteArray.length;
+    }
 }
