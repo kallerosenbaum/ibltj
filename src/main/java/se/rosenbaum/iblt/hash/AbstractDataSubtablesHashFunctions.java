@@ -12,7 +12,8 @@ public abstract class AbstractDataSubtablesHashFunctions<D extends Data> impleme
 
     public AbstractDataSubtablesHashFunctions(int cellCount, int hashFunctionCount) {
         if (cellCount % hashFunctionCount != 0) {
-            throw new RuntimeException("Number of cells must be a multiple of number of hash functions");
+            throw new RuntimeException("Number of cells must be a multiple of number of hash functions! cellCount=" +
+            cellCount + ", hashFunctionCount=" + hashFunctionCount);
         }
         try {
             messageDigest = MessageDigest.getInstance("SHA-256");
