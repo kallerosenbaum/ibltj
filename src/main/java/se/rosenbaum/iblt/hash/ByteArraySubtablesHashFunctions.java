@@ -1,5 +1,6 @@
 package se.rosenbaum.iblt.hash;
 
+import com.google.common.hash.HashCode;
 import se.rosenbaum.iblt.data.ByteArrayData;
 
 import java.nio.ByteBuffer;
@@ -15,7 +16,9 @@ public class ByteArraySubtablesHashFunctions extends AbstractDataSubtablesHashFu
         byte[] valueToDigest = data.getValue();
         valueToDigest[0] += hashFunctionNumber;
 
-        byte[] digested = messageDigest.digest(valueToDigest);
-        return ByteBuffer.allocate(4).put(digested, 28, 4).getInt(0);
+        HashCode hashCode = hashingImplementation.hashBytes(valueToDigest);
+        //byte[] digested = messageDigest.digest(valueToDigest);
+        return hashCode.asInt();
+                //ByteBuffer.allocate(4).put(digested, 28, 4).getInt(0);
     }
 }

@@ -51,7 +51,7 @@ public class SetReconciliatorTest {
 
     @Test
     public void testReconcile100() {
-        IBLT<IntegerData, IntegerData> iblt = createIblt(16, 4);
+        IBLT<IntegerData, IntegerData> iblt = createIblt(20, 4);
         Map<IntegerData, IntegerData> ibltData = createRandomMap(100);
         Map<IntegerData, IntegerData> myData = createDifference(5, 5, ibltData);
         testReconcile(ibltData, iblt, myData);

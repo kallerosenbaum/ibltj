@@ -1,5 +1,6 @@
 package se.rosenbaum.iblt.hash;
 
+import com.google.common.hash.Hashing;
 import se.rosenbaum.iblt.data.IntegerData;
 import se.rosenbaum.iblt.data.LongData;
 
@@ -9,23 +10,15 @@ import java.security.NoSuchAlgorithmException;
 
 public class LongDataHashFunction implements HashFunction<LongData, LongData> {
     MessageDigest digest;
+    private final com.google.common.hash.HashFunction hashImplementation;
+
 
     public LongDataHashFunction() {
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Could not create MessageDigest SHA-256", e);
-        }
+        hashImplementation = Hashing.murmur3_128();
     }
 
     @Override
     public LongData hash(LongData data) {
-        digest.reset();
-
-        byte[] longBytes = ByteBuffer.allocate(8).putLong(data.getValue()).array();
-        byte[] digested = digest.digest(longBytes);
-        long result = ByteBuffer.allocate(8).put(digested, 24, 4).getLong(0);
-
-        return new LongData(result);
+        return new LongData(hashImplementation.hashLong(data.getValue()).asLong());
     }
 }

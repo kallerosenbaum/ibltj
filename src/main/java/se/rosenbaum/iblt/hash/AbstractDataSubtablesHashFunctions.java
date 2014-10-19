@@ -1,5 +1,7 @@
 package se.rosenbaum.iblt.hash;
 
+import com.google.common.hash.Hashing;
+import com.google.common.hash.HashFunction;
 import se.rosenbaum.iblt.data.Data;
 
 import java.security.MessageDigest;
@@ -9,6 +11,7 @@ public abstract class AbstractDataSubtablesHashFunctions<D extends Data> impleme
     protected int cellCount;
     protected int hashFunctionCount;
     protected MessageDigest messageDigest;
+    protected HashFunction hashingImplementation;
 
     public AbstractDataSubtablesHashFunctions(int cellCount, int hashFunctionCount) {
         if (cellCount % hashFunctionCount != 0) {
@@ -16,6 +19,7 @@ public abstract class AbstractDataSubtablesHashFunctions<D extends Data> impleme
             cellCount + ", hashFunctionCount=" + hashFunctionCount);
         }
         try {
+            hashingImplementation = Hashing.murmur3_32();
             messageDigest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Could not create MessageDigest SHA-256", e);
@@ -32,7 +36,6 @@ public abstract class AbstractDataSubtablesHashFunctions<D extends Data> impleme
         // hashFunctionNumber acts as a salt so that the different
         // hashFunctions yields different results
 
-        messageDigest.reset();
         int digest = digest(hashFunctionNumber, data);
 
         int subtableSize = cellCount / hashFunctionCount;

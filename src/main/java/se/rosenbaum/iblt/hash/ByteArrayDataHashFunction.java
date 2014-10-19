@@ -1,5 +1,7 @@
 package se.rosenbaum.iblt.hash;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import se.rosenbaum.iblt.data.ByteArrayData;
 import se.rosenbaum.iblt.data.LongData;
 
@@ -9,24 +11,21 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class ByteArrayDataHashFunction implements HashFunction<ByteArrayData, ByteArrayData> {
-    MessageDigest digest;
+    private final com.google.common.hash.HashFunction hashImplementation;
     int byteArraySize;
 
     public ByteArrayDataHashFunction(int byteArraySizeOfResult) {
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Could not create MessageDigest SHA-256", e);
+        if (byteArraySizeOfResult <= 4) {
+            hashImplementation = Hashing.murmur3_32();
+        } else {
+            hashImplementation = Hashing.murmur3_128();
         }
         this.byteArraySize = byteArraySizeOfResult;
     }
 
     @Override
     public ByteArrayData hash(ByteArrayData data) {
-        digest.reset();
-
-        byte[] digested = digest.digest(data.getValue());
-
-        return new ByteArrayData(Arrays.copyOfRange(digested, 32 - byteArraySize, 32));
+        HashCode hashCode = hashImplementation.hashBytes(data.getValue());
+        return new ByteArrayData(Arrays.copyOfRange(hashCode.asBytes(), 0, byteArraySize));
     }
 }

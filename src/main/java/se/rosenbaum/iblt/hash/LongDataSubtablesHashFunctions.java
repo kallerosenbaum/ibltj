@@ -1,5 +1,6 @@
 package se.rosenbaum.iblt.hash;
 
+import com.google.common.hash.HashCode;
 import se.rosenbaum.iblt.data.LongData;
 
 import java.nio.ByteBuffer;
@@ -18,8 +19,8 @@ public class LongDataSubtablesHashFunctions extends AbstractDataSubtablesHashFun
     public int digest(int hashFunctionNumber, LongData data) {
         long longToDigest = data.getValue() + hashFunctionNumber;
 
-        byte[] longBytes = ByteBuffer.allocate(8).putLong(longToDigest).array();
-        byte[] digested = messageDigest.digest(longBytes);
-        return ByteBuffer.allocate(4).put(digested, 28, 4).getInt(0);
+        HashCode hashCode = hashingImplementation.hashLong(longToDigest);
+        //byte[] digested = messageDigest.digest(valueToDigest);
+        return hashCode.asInt();
     }
 }
