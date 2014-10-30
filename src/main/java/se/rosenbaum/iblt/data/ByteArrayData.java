@@ -54,6 +54,14 @@ public class ByteArrayData implements Data<ByteArrayData> {
         return Arrays.equals(byteArray, ((ByteArrayData)obj).byteArray);
     }
 
+    public int hashCode() {
+        int i = 0;
+        for (byte b : byteArray) {
+            i += b;
+        }
+        return i;
+    }
+
     public byte[] getValue() {
         return Arrays.copyOf(byteArray, byteArray.length);
     }
