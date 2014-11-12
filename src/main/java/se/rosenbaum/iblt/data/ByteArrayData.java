@@ -3,7 +3,7 @@ package se.rosenbaum.iblt.data;
 import java.util.Arrays;
 
 public class ByteArrayData implements Data<ByteArrayData> {
-    private byte[] byteArray;
+    protected byte[] byteArray;
     private static final byte ZERO = 0;
 
     public ByteArrayData(int sizeInBytes) {
