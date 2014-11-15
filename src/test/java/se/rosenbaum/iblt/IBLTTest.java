@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static se.rosenbaum.iblt.util.TestUtils.data;
@@ -173,13 +174,30 @@ public class IBLTTest {
         sut = new IBLT<IntegerData, IntegerData>(TestUtils.createIntegerCells(5), new IntegerSimpleHashFunctions(5, 1));
         insertAll(1, 3, 4);
         deleteAll(2, 5);
-        // All the values will be in a separate cell, since we use the IntegerSimpleHashFunctions. We will be able to
+        // All the values will be in a separate cell, since we use the IntegerSimpleHashFunctions.
         ResidualData<IntegerData, IntegerData> result = sut.listEntries();
         assertNotNull(result);
         Map<IntegerData, IntegerData> extras = result.getExtraEntries();
         assertAllIncluded(extras, 1, 3, 4);
         Map<IntegerData,IntegerData> absents = result.getAbsentEntries();
         assertAllIncluded(absents, 2, 5);
+    }
+
+    @Test
+    public void testListEntriesListener() {
+        sut = new IBLT<IntegerData, IntegerData>(TestUtils.createIntegerCells(5), new IntegerSimpleHashFunctions(5, 1));
+        insertAll(1, 3, 4);
+        deleteAll(2, 5);
+
+        ListEntriesListener listener = createMock(ListEntriesListener.class);
+        listener.absentKeyDetected(new IntegerData(5), new IntegerData(5));
+        expectLastCall();
+        listener.absentKeyDetected(new IntegerData(2), new IntegerData(2));
+        expectLastCall();
+        replay(listener);
+        sut.listEntries(listener);
+        verify(listener);
+
     }
 
     private void assertAllIncluded(Map<IntegerData, IntegerData> map, int... values) {

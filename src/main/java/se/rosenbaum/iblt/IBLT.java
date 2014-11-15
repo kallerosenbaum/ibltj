@@ -59,13 +59,66 @@ public class IBLT<K extends Data, V extends Data> {
         throw new NotFoundException(key);
     }
 
+    public ResidualData<K, V> listEntries() {
+        return listEntries(null);
+    }
+
+
+    /**
+     * Tries to list all entries. If all entries can be listed, a ResidualData is returned. This operation will
+     * alter the IBLT itself, so you can only use it once.
+     *
+     * If a listEntriesListener is not null, then all absent keys and values will be reported through that
+     * interface.
+     *
+     * @return If all entries can be listed, a ResidualData containing all entries. Otherwise null is returned.
+     */
+    public ResidualData<K, V> listEntries(ListEntriesListener listEntriesListener) {
+        ResidualData<K, V> residualData = new ResidualData<K, V>();
+
+        boolean entryFound = true;
+        while (entryFound) {
+            entryFound = false;
+            boolean allZero = true;
+            for (Cell<K, V> cell : cells) {
+                if (!cell.isUnambiguous()) {
+                    allZero = false;
+                    continue;
+                }
+                if (cell.getCount() == 1) {
+                    K key = (K) cell.getKeySum().copy();
+                    V value = (V) cell.getValueSum().copy();
+                    residualData.putExtra(key, value);
+                    this.delete(key, value);
+                    allZero = false;
+                    entryFound = true;
+                } else if (cell.getCount() == -1) {
+                    K key = (K) cell.getKeySum().invertCopy();
+                    V value = (V) cell.getValueSum().invertCopy();
+                    residualData.putAbsent(key, value);
+                    this.insert(key, value);
+                    allZero = false;
+                    entryFound = true;
+                    if (listEntriesListener != null) {
+                        listEntriesListener.absentKeyDetected(key, value);
+                    }
+                }
+            }
+            if (allZero) {
+                return residualData;
+            }
+        }
+        return null;
+    }
+
+
     /**
      * Tries to list all entries. If all entries can be listed, a ResidualData is returned. This operation will
      * alter the IBLT itself, so you can only use it once.
      *
      * @return If all entries can be listed, a ResidualData containing all entries. Otherwise null is returned.
      */
-    public ResidualData<K, V> listEntries() {
+    public ResidualData<K, V> listEntriesNew() {
         ResidualData<K, V> residualData = new ResidualData<K, V>();
 
         boolean entryFound = true;
