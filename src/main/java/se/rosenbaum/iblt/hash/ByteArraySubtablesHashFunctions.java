@@ -3,9 +3,7 @@ package se.rosenbaum.iblt.hash;
 import com.google.common.hash.HashCode;
 import se.rosenbaum.iblt.data.ByteArrayData;
 
-import java.nio.ByteBuffer;
-
-public class ByteArraySubtablesHashFunctions extends AbstractDataSubtablesHashFunctions<ByteArrayData> {
+public class ByteArraySubtablesHashFunctions<D extends ByteArrayData> extends AbstractDataSubtablesHashFunctions<D> {
 
     public ByteArraySubtablesHashFunctions(int cellCount, int hashFunctionCount) {
         super(cellCount, hashFunctionCount);

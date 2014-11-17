@@ -3,11 +3,7 @@ package se.rosenbaum.iblt.hash;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import se.rosenbaum.iblt.data.ByteArrayData;
-import se.rosenbaum.iblt.data.LongData;
 
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class ByteArrayDataHashFunction implements HashFunction<ByteArrayData, ByteArrayData> {

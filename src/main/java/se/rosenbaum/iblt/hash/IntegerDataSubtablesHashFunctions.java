@@ -3,8 +3,6 @@ package se.rosenbaum.iblt.hash;
 import com.google.common.hash.HashCode;
 import se.rosenbaum.iblt.data.IntegerData;
 
-import java.nio.ByteBuffer;
-
 /**
 * User: kalle
 * Date: 9/14/14 1:21 PM

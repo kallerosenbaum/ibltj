@@ -5,12 +5,14 @@ import se.rosenbaum.iblt.data.IntegerData;
 import se.rosenbaum.iblt.util.SetReconciliator;
 
 import java.util.Map;
-import java.util.Random;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
-import static se.rosenbaum.iblt.util.TestUtils.*;
+import static se.rosenbaum.iblt.util.TestUtils.createDifference;
+import static se.rosenbaum.iblt.util.TestUtils.createIblt;
+import static se.rosenbaum.iblt.util.TestUtils.createMap;
+import static se.rosenbaum.iblt.util.TestUtils.createRandomMap;
 
 public class SetReconciliatorTest {
 

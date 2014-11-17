@@ -1,7 +1,7 @@
 package se.rosenbaum.iblt.hash;
 
-import com.google.common.hash.Hashing;
 import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import se.rosenbaum.iblt.data.Data;
 
 import java.security.MessageDigest;

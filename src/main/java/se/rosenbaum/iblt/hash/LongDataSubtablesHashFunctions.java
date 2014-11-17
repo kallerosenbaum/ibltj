@@ -3,13 +3,11 @@ package se.rosenbaum.iblt.hash;
 import com.google.common.hash.HashCode;
 import se.rosenbaum.iblt.data.LongData;
 
-import java.nio.ByteBuffer;
-
 /**
 * User: kalle
 * Date: 9/14/14 1:21 PM
 */
-public class LongDataSubtablesHashFunctions extends AbstractDataSubtablesHashFunctions<LongData> {
+public class LongDataSubtablesHashFunctions<D extends LongData> extends AbstractDataSubtablesHashFunctions<D> {
 
     public LongDataSubtablesHashFunctions(int cellCount, int hashFunctionCount) {
         super(cellCount, hashFunctionCount);

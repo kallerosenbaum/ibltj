@@ -1,12 +1,9 @@
 package se.rosenbaum.iblt.hash;
 
 import com.google.common.hash.Hashing;
-import se.rosenbaum.iblt.data.IntegerData;
 import se.rosenbaum.iblt.data.LongData;
 
-import java.nio.ByteBuffer;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class LongDataHashFunction implements HashFunction<LongData, LongData> {
     MessageDigest digest;

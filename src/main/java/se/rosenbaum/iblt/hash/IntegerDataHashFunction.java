@@ -3,10 +3,6 @@ package se.rosenbaum.iblt.hash;
 import com.google.common.hash.Hashing;
 import se.rosenbaum.iblt.data.IntegerData;
 
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class IntegerDataHashFunction implements HashFunction<IntegerData, IntegerData> {
     private final com.google.common.hash.HashFunction hashImplementation;
 

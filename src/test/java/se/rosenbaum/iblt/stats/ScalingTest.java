@@ -7,14 +7,12 @@ import se.rosenbaum.iblt.data.IntegerData;
 import se.rosenbaum.iblt.util.SetReconciliator;
 import se.rosenbaum.iblt.util.TestUtils;
 
-import java.text.Format;
 import java.util.Map;
 import java.util.Random;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static se.rosenbaum.iblt.util.TestUtils.createIblt;
-import static se.rosenbaum.iblt.util.TestUtils.data;
 
 public class ScalingTest {
 
