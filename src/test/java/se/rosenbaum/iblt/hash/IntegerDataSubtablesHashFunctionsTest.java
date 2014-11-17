@@ -12,7 +12,6 @@ import static se.rosenbaum.iblt.util.TestUtils.data;
 
 public class IntegerDataSubtablesHashFunctionsTest {
     @Test
-    @Ignore
     public void test4and6() {
         IntegerDataSubtablesHashFunctions sut = new IntegerDataSubtablesHashFunctions(10, 2);
         int hash40 = sut.hash(0, data(4));

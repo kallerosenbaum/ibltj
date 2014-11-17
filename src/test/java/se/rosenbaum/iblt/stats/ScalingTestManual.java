@@ -14,7 +14,7 @@ import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static se.rosenbaum.iblt.util.TestUtils.createIblt;
 
-public class ScalingTest {
+public class ScalingTestManual {
 
     public static class IBLTSpec {
         int dataSize;
@@ -38,7 +38,6 @@ public class ScalingTest {
 
 
     @Test
-    @Ignore
     public void test() {
         Random random = new Random(System.currentTimeMillis());
         IBLTSpec spec = new IBLTSpec();

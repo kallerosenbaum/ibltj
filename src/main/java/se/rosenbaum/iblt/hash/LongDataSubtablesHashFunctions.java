@@ -18,7 +18,6 @@ public class LongDataSubtablesHashFunctions<D extends LongData> extends Abstract
         long longToDigest = data.getValue() + hashFunctionNumber;
 
         HashCode hashCode = hashingImplementation.hashLong(longToDigest);
-        //byte[] digested = messageDigest.digest(valueToDigest);
         return hashCode.asInt();
     }
 }
