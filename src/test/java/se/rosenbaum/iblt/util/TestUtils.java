@@ -17,7 +17,7 @@ public class TestUtils {
         Cell[] cells = new Cell[numberOfCells];
         HashFunction<IntegerData, IntegerData> hashFunction = new IntegerDataHashFunction();
         for (int i = 0; i < numberOfCells; i++) {
-            cells[i] = new Cell(data(0), data(0), data(0), hashFunction);
+            cells[i] = new Cell(data(0), data(0), data(0), hashFunction, 0);
         }
         return cells;
     }

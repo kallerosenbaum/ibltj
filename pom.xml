@@ -7,6 +7,7 @@
     <groupId>se.rosenbaum</groupId>
     <artifactId>iblt</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

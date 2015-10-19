@@ -8,26 +8,27 @@ import se.rosenbaum.iblt.hash.HashFunction;
  * Date: 9/11/14 6:41 PM
  */
 public class Cell<K extends Data, V extends Data> {
-    private int count = 0;
+    private int count;
     private K keySum;
     private V valueSum;
     private Data hashKeySum;
     private HashFunction<K, ? extends Data> hashFunction;
 
-    public Cell(K zeroKeyData, V zeroValueData, Data zeroHashKeyData, HashFunction<K, ? extends Data> hashFunction) {
-        if (zeroKeyData == null) {
-            throw new RuntimeException("zeroKeyData must not be null");
+    public Cell(K initialKey, V initialValue, Data initialHashKey, HashFunction<K, ? extends Data> hashFunction, int initialCount) {
+        if (initialKey == null) {
+            throw new RuntimeException("initialKey must not be null");
         }
-        if (zeroValueData == null) {
+        if (initialValue == null) {
             throw new RuntimeException("zeroValueata must not be null");
         }
-        if (zeroHashKeyData == null) {
-            throw new RuntimeException("zeroHashKeyData must not be null");
+        if (initialHashKey == null) {
+            throw new RuntimeException("initialHashKey must not be null");
         }
-        keySum = zeroKeyData;
-        valueSum = zeroValueData;
-        hashKeySum = zeroHashKeyData;
+        keySum = initialKey;
+        valueSum = initialValue;
+        hashKeySum = initialHashKey;
         this.hashFunction = hashFunction;
+        this.count = initialCount;
     }
 
     public void add(K key, V value) {
@@ -69,5 +70,9 @@ public class Cell<K extends Data, V extends Data> {
             return true;
         }
         return false;
+    }
+
+    public Data getHashKeySum() {
+        return hashKeySum;
     }
 }

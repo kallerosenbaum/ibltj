@@ -110,4 +110,8 @@ public class IBLT<K extends Data, V extends Data> {
         }
         return null;
     }
+
+    public Cell<K, V>[] getCells() {
+        return cells;
+    }
 }
