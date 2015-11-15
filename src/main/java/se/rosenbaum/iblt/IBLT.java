@@ -88,20 +88,39 @@ public class IBLT<K extends Data, V extends Data> {
                 if (cell.getCount() == 1) {
                     K key = (K) cell.getKeySum().copy();
                     V value = (V) cell.getValueSum().copy();
-                    residualData.putExtra(key, value);
                     this.delete(key, value);
+                    if (cell.getCount() == 1) {
+                        // This was a false 1, since the key didn't hash to this cell. Put it back!
+                        this.insert(key, value);
+                        allZero = false;
+                        continue;
+                    }
+                    residualData.putExtra(key, value);
                     allZero = false;
                     entryFound = true;
                 } else if (cell.getCount() == -1) {
                     K key = (K) cell.getKeySum().invertCopy();
                     V value = (V) cell.getValueSum().invertCopy();
-                    residualData.putAbsent(key, value);
                     this.insert(key, value);
+                    if (cell.getCount() == -1) {
+                        // This was a false -1, since the key didn't hash to this cell. Remove it again!
+                        this.delete(key, value);
+                        allZero = false;
+                        continue;
+                    }
+                    if (listEntriesListener != null) {
+                        boolean ok = listEntriesListener.absentKeyDetected(key, value);
+                        if (!ok) {
+                            // Someone with more knowledge of the data knows this is a false -1 AND the
+                            // keyHashSum happened to match key. Remove it again!
+                            this.delete(key, value);
+                            allZero = false;
+                            continue;
+                        }
+                    }
+                    residualData.putAbsent(key, value);
                     allZero = false;
                     entryFound = true;
-                    if (listEntriesListener != null) {
-                        listEntriesListener.absentKeyDetected(key, value);
-                    }
                 }
             }
             if (allZero) {

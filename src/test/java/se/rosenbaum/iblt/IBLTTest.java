@@ -14,6 +14,7 @@ import java.util.Map;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -194,9 +195,8 @@ public class IBLTTest {
         deleteAll(2, 5);
 
         ListEntriesListener listener = createMock(ListEntriesListener.class);
-        listener.absentKeyDetected(new IntegerData(5), new IntegerData(5));
-        expectLastCall();
-        listener.absentKeyDetected(new IntegerData(2), new IntegerData(2));
+        expect(listener.absentKeyDetected(new IntegerData(5), new IntegerData(5))).andReturn(true);
+        expect(listener.absentKeyDetected(new IntegerData(2), new IntegerData(2))).andReturn(true);
         expectLastCall();
         replay(listener);
         sut.listEntries(listener);

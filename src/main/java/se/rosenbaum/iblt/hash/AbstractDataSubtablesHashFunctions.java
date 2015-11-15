@@ -29,9 +29,15 @@ public abstract class AbstractDataSubtablesHashFunctions<D extends Data> impleme
         int digest = digest(hashFunctionNumber, data);
 
         int subtableSize = cellCount / hashFunctionCount;
-        // We want a positive integer. Note that this is not very good because zero has
+
+        // We want a positive integer.
+        // Let's use Math.abs(int). Note that zero has
         // half the probability as the rest of the values. -2 and 2 will both result i 2
-        // but only 0 will result in 0.
+        // but only 0 will result in 0. But Math.abs(Integer.MIN_VALUE) == Integer.MIN_VALUE,
+        // so if digest is MIN_VALUE, let's use 0 for MIN_VALUE as well!
+        if (digest == Integer.MIN_VALUE) {
+            digest = 0;
+        }
         int cellIndex = Math.abs(digest) % subtableSize + hashFunctionNumber * subtableSize;
         return cellIndex;
     }

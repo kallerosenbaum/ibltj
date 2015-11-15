@@ -75,4 +75,23 @@ public class Cell<K extends Data, V extends Data> {
     public Data getHashKeySum() {
         return hashKeySum;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cell<?, ?> cell = (Cell<?, ?>) o;
+
+        if (count != cell.count) return false;
+        if (!keySum.equals(cell.keySum)) return false;
+        if (!hashKeySum.equals(cell.hashKeySum)) return false;
+        if (!valueSum.equals(cell.valueSum)) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashKeySum.hashCode();
+    }
 }
